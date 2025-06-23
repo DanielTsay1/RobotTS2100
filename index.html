@@ -3,493 +3,263 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Robot Drawing Pattern Visualization</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Robot Drawing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        * {
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background: #f7fafc;
+            color: #222;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: #2d3748;
-            line-height: 1.6;
-        }
-
         .header {
             text-align: center;
-            padding: 40px 20px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
+            padding: 32px 0 16px 0;
         }
-
         .header h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 10px;
-        }
-
-        .header p {
-            font-size: 1.1rem;
-            color: #718096;
-            font-weight: 400;
-        }
-
-        .main-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .controls {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 30px;
-            border-radius: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .controls h2 {
-            font-size: 1.5rem;
+            font-size: 2rem;
             font-weight: 600;
-            margin-bottom: 25px;
-            color: #2d3748;
+            color: #2563eb;
+            margin-bottom: 8px;
+        }
+        .header p {
+            color: #555;
+            font-size: 1rem;
+        }
+        .main-container {
+            max-width: 420px;
+            margin: 0 auto;
+            padding: 0 16px 32px 16px;
+        }
+        .controls {
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px 16px 10px 16px;
+            margin-bottom: 24px;
+            border: 1px solid #e5e7eb;
+        }
+        .controls h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #2563eb;
             text-align: center;
         }
-
-        .control-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-        }
-
         .control-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
+            margin-bottom: 18px;
         }
-
         .control-group label {
-            font-weight: 500;
-            color: #4a5568;
-            font-size: 0.95rem;
+            display: block;
+            font-size: 0.97rem;
+            color: #333;
+            margin-bottom: 4px;
         }
-
         .control-row {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 10px;
         }
-
         input[type="range"] {
             flex: 1;
-            height: 6px;
-            border-radius: 3px;
-            background: #e2e8f0;
-            outline: none;
-            -webkit-appearance: none;
-            appearance: none;
+            accent-color: #2563eb;
         }
-
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
-        }
-
-        input[type="range"]::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            cursor: pointer;
-            border: none;
-            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
-        }
-
         .value-display {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-weight: 500;
-            font-size: 0.9rem;
-            min-width: 60px;
-            text-align: center;
-        }
-
-        .container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-
-        .pattern {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            text-align: center;
-        }
-
-        .pattern h3 {
-            font-size: 1.3rem;
+            min-width: 36px;
+            text-align: right;
+            font-size: 0.97rem;
+            color: #2563eb;
             font-weight: 600;
-            margin-bottom: 20px;
-            color: #2d3748;
         }
-
+        .pattern {
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px 10px 10px 10px;
+            border: 1px solid #e5e7eb;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        .pattern h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2563eb;
+            margin-bottom: 12px;
+        }
         svg {
-            border-radius: 15px;
-            background: white;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            border: 2px solid #e2e8f0;
+            background: #f7fafc;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
         }
-
         .center-dot {
-            fill: #e53e3e;
-            filter: drop-shadow(0 2px 4px rgba(229, 62, 62, 0.3));
+            fill: #ef4444;
         }
-
         .shape {
             fill: none;
-            stroke: #3182ce;
-            stroke-width: 3;
-            filter: drop-shadow(0 2px 4px rgba(49, 130, 206, 0.2));
-        }
-
-        .radius-line {
-            stroke: #a0aec0;
+            stroke: #2563eb;
             stroke-width: 2;
-            stroke-dasharray: 8,8;
-            opacity: 0.7;
         }
-
+        .radius-line {
+            stroke: #cbd5e1;
+            stroke-width: 1;
+            stroke-dasharray: 5,5;
+        }
         .disk-boundary {
             fill: none;
-            stroke: #cbd5e0;
-            stroke-width: 2;
-            stroke-dasharray: 5,5;
-            opacity: 0.8;
+            stroke: #d1d5db;
+            stroke-width: 1;
+            stroke-dasharray: 3,3;
         }
-
         .legend {
-            background: linear-gradient(135deg, #f7fafc, #edf2f7);
-            padding: 20px;
-            border-radius: 15px;
-            margin-top: 20px;
-            font-size: 0.9rem;
-            border: 1px solid #e2e8f0;
+            background: #f3f4f6;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 0.93rem;
+            margin-top: 10px;
+            color: #444;
         }
-
-        .legend h4 {
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: #2d3748;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 8px;
-        }
-
-        .legend-symbol {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
+        .legend span {
             display: inline-block;
+            width: 1.2em;
+            text-align: center;
         }
-
         .info-section {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: #fff;
+            border-radius: 10px;
+            padding: 18px 14px;
+            border: 1px solid #e5e7eb;
+            font-size: 0.98rem;
         }
-
         .info-section h3 {
-            font-size: 1.4rem;
+            font-size: 1.05rem;
             font-weight: 600;
-            margin-bottom: 20px;
-            color: #2d3748;
+            color: #2563eb;
+            margin-bottom: 10px;
         }
-
         .info-section ul {
-            list-style: none;
-            padding: 0;
+            padding-left: 18px;
+            margin-bottom: 10px;
         }
-
         .info-section li {
-            padding: 12px 0;
-            border-bottom: 1px solid #e2e8f0;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
+            margin-bottom: 6px;
         }
-
-        .info-section li:last-child {
-            border-bottom: none;
-        }
-
-        .info-section li::before {
-            content: "•";
-            color: #667eea;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-
         .code-example {
-            background: linear-gradient(135deg, #2d3748, #4a5568);
-            color: #e2e8f0;
-            padding: 20px;
-            border-radius: 12px;
-            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-            font-size: 0.95rem;
-            margin: 20px 0;
-            border: 1px solid #4a5568;
+            background: #f3f4f6;
+            color: #222;
+            padding: 10px;
+            border-radius: 6px;
+            font-family: 'Menlo', 'Monaco', monospace;
+            font-size: 0.97rem;
+            margin: 10px 0;
         }
-
-        .example-details {
-            background: #f7fafc;
-            padding: 20px;
-            border-radius: 12px;
-            border-left: 4px solid #667eea;
-            margin: 20px 0;
-        }
-
-        .example-details ul {
-            margin-top: 15px;
-        }
-
-        .example-details li {
-            padding: 6px 0;
-            border-bottom: none;
-        }
-
-        .example-details li::before {
-            content: "→";
-            color: #667eea;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
-            
-            .control-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .header h1 {
-                font-size: 2rem;
-            }
-        }
-
-        .floating-shapes {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-            overflow: hidden;
-        }
-
-        .floating-shape {
-            position: absolute;
-            opacity: 0.1;
-            animation: float 20s infinite linear;
-        }
-
-        @keyframes float {
-            0% {
-                transform: translateY(100vh) rotate(0deg);
-            }
-            100% {
-                transform: translateY(-100px) rotate(360deg);
+        @media (max-width: 600px) {
+            .main-container {
+                max-width: 100%;
+                padding: 0 4px 24px 4px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="floating-shapes">
-        <div class="floating-shape" style="left: 10%; animation-delay: 0s;">▲</div>
-        <div class="floating-shape" style="left: 20%; animation-delay: 2s;">■</div>
-        <div class="floating-shape" style="left: 30%; animation-delay: 4s;">●</div>
-        <div class="floating-shape" style="left: 40%; animation-delay: 6s;">◆</div>
-        <div class="floating-shape" style="left: 50%; animation-delay: 8s;">▲</div>
-        <div class="floating-shape" style="left: 60%; animation-delay: 10s;">■</div>
-        <div class="floating-shape" style="left: 70%; animation-delay: 12s;">●</div>
-        <div class="floating-shape" style="left: 80%; animation-delay: 14s;">◆</div>
-        <div class="floating-shape" style="left: 90%; animation-delay: 16s;">▲</div>
-    </div>
-
     <div class="header">
-        <h1>Robot Drawing Pattern Visualization</h1>
-        <p>Interactive tool for exploring geometric patterns and robot drawing algorithms</p>
+        <h1>Robot Drawing Pattern</h1>
+        <p>Visualize geometric patterns for your robot</p>
     </div>
-    
     <div class="main-container">
         <div class="controls">
-            <h2>🎛️ Pattern Controls</h2>
-            <div class="control-grid">
-                <div class="control-group">
-                    <label>Number of Shapes</label>
-                    <div class="control-row">
-                        <input type="range" id="numShapes" min="3" max="8" value="5" oninput="updatePattern()">
-                        <div class="value-display" id="numShapesValue">5</div>
-                    </div>
+            <h2>Pattern Controls</h2>
+            <div class="control-group">
+                <label>Number of Shapes</label>
+                <div class="control-row">
+                    <input type="range" id="numShapes" min="3" max="8" value="5" oninput="updatePattern()">
+                    <div class="value-display" id="numShapesValue">5</div>
                 </div>
-                <div class="control-group">
-                    <label>Sides per Shape</label>
-                    <div class="control-row">
-                        <input type="range" id="numSides" min="3" max="8" value="4" oninput="updatePattern()">
-                        <div class="value-display" id="numSidesValue">4</div>
-                    </div>
+            </div>
+            <div class="control-group">
+                <label>Sides per Shape</label>
+                <div class="control-row">
+                    <input type="range" id="numSides" min="3" max="8" value="4" oninput="updatePattern()">
+                    <div class="value-display" id="numSidesValue">4</div>
                 </div>
-                <div class="control-group">
-                    <label>Shape Size</label>
-                    <div class="control-row">
-                        <input type="range" id="shapeSize" min="20" max="60" value="40" oninput="updatePattern()">
-                        <div class="value-display" id="shapeSizeValue">40px</div>
-                    </div>
+            </div>
+            <div class="control-group">
+                <label>Shape Size</label>
+                <div class="control-row">
+                    <input type="range" id="shapeSize" min="20" max="60" value="40" oninput="updatePattern()">
+                    <div class="value-display" id="shapeSizeValue">40px</div>
                 </div>
-                <div class="control-group">
-                    <label>Radius from Center</label>
-                    <div class="control-row">
-                        <input type="range" id="radius" min="60" max="140" value="100" oninput="updatePattern()">
-                        <div class="value-display" id="radiusValue">100px</div>
-                    </div>
+            </div>
+            <div class="control-group">
+                <label>Radius from Center</label>
+                <div class="control-row">
+                    <input type="range" id="radius" min="60" max="140" value="100" oninput="updatePattern()">
+                    <div class="value-display" id="radiusValue">100px</div>
                 </div>
             </div>
         </div>
-
-        <div class="container">
-            <div class="pattern">
-                <h3>🎨 Interactive Pattern</h3>
-                <svg id="patternSvg" width="350" height="350"></svg>
-                <div class="legend">
-                    <h4>Legend</h4>
-                    <div class="legend-item">
-                        <div class="legend-symbol" style="background: #e53e3e;"></div>
-                        <span>Center Point (centerX, centerY)</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-symbol" style="background: #3182ce;"></div>
-                        <span>Shapes (squares, triangles, etc.)</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-symbol" style="background: #a0aec0;"></div>
-                        <span>Radius lines to each shape</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-symbol" style="background: #cbd5e0;"></div>
-                        <span>8-inch disk boundary</span>
-                    </div>
-                </div>
+        <div class="pattern">
+            <h3>Interactive Pattern</h3>
+            <svg id="patternSvg" width="350" height="350"></svg>
+            <div class="legend">
+                <div><span style="color: #ef4444;">●</span> Center Point</div>
+                <div><span style="color: #2563eb;">━</span> Shapes</div>
+                <div><span style="color: #cbd5e1;">┅</span> Radius lines</div>
+                <div><span style="color: #d1d5db;">┅</span> 8-inch disk boundary</div>
             </div>
-
-            <div class="info-section">
-                <h3>🤖 How Your Program Works</h3>
-                <ul>
-                    <li><strong>Center Point:</strong> The red dot shows where you set (centerX, centerY)</li>
-                    <li><strong>Radius:</strong> Each shape is placed exactly "radius" distance from center</li>
-                    <li><strong>Even Distribution:</strong> Shapes are evenly spaced around the circle</li>
-                    <li><strong>Shape Rotation:</strong> Each shape can be individually rotated</li>
-                    <li><strong>Boundary Check:</strong> Dotted circle shows 8-inch disk limit</li>
-                </ul>
-                
-                <h3 style="margin-top: 30px;">💡 Example Function Call</h3>
-                <div class="code-example">
-                    drawPatternSingleBlock(5, 4, 1.5, 2.5, 0.0, 0.0)
-                </div>
-                <div class="example-details">
-                    <strong>Parameters breakdown:</strong>
-                    <ul>
-                        <li>5 shapes around the center</li>
-                        <li>4 sides each (squares)</li>
-                        <li>1.5 inch side length</li>
-                        <li>2.5 inches from center</li>
-                        <li>Centered at (0.0, 0.0)</li>
-                    </ul>
-                </div>
+        </div>
+        <div class="info-section">
+            <h3>How It Works</h3>
+            <ul>
+                <li>The red dot is the center</li>
+                <li>Each shape is placed at the chosen radius</li>
+                <li>Shapes are evenly spaced around the circle</li>
+                <li>Dotted circle shows the 8-inch disk limit</li>
+            </ul>
+            <div class="code-example">
+                drawPatternSingleBlock(5, 4, 1.5, 2.5, 0.0, 0.0)
             </div>
+            <ul>
+                <li>5 shapes around the center</li>
+                <li>4 sides each (squares)</li>
+                <li>1.5 inch side length</li>
+                <li>2.5 inches from center</li>
+                <li>Centered at (0.0, 0.0)</li>
+            </ul>
         </div>
     </div>
-
     <script>
         function updatePattern() {
             const numShapes = parseInt(document.getElementById('numShapes').value);
             const numSides = parseInt(document.getElementById('numSides').value);
             const shapeSize = parseInt(document.getElementById('shapeSize').value);
             const radius = parseInt(document.getElementById('radius').value);
-            
-            // Update display values
             document.getElementById('numShapesValue').textContent = numShapes;
             document.getElementById('numSidesValue').textContent = numSides;
             document.getElementById('shapeSizeValue').textContent = shapeSize + 'px';
             document.getElementById('radiusValue').textContent = radius + 'px';
-            
             drawPattern(numShapes, numSides, shapeSize, radius);
         }
-        
         function drawPattern(numShapes, numSides, shapeSize, radius) {
             const svg = document.getElementById('patternSvg');
             const centerX = 175;
             const centerY = 175;
-            const diskRadius = 140; // Represents 4-inch radius (8-inch disk)
-            
-            // Clear previous pattern
+            const diskRadius = 140;
             svg.innerHTML = '';
-            
-            // Draw disk boundary
             const diskCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
             diskCircle.setAttribute('cx', centerX);
             diskCircle.setAttribute('cy', centerY);
             diskCircle.setAttribute('r', diskRadius);
             diskCircle.setAttribute('class', 'disk-boundary');
             svg.appendChild(diskCircle);
-            
-            // Draw center point
             const centerDot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
             centerDot.setAttribute('cx', centerX);
             centerDot.setAttribute('cy', centerY);
             centerDot.setAttribute('r', 4);
             centerDot.setAttribute('class', 'center-dot');
             svg.appendChild(centerDot);
-            
-            // Draw shapes around the center
             for (let i = 0; i < numShapes; i++) {
                 const shapeRotation = i * (360 / numShapes);
                 const shapeX = centerX + radius * Math.cos(shapeRotation * Math.PI / 180);
                 const shapeY = centerY + radius * Math.sin(shapeRotation * Math.PI / 180);
-                
-                // Draw radius line
                 const radiusLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
                 radiusLine.setAttribute('x1', centerX);
                 radiusLine.setAttribute('y1', centerY);
@@ -497,33 +267,25 @@
                 radiusLine.setAttribute('y2', shapeY);
                 radiusLine.setAttribute('class', 'radius-line');
                 svg.appendChild(radiusLine);
-                
-                // Draw shape
                 const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
                 let points = '';
-                
                 for (let j = 0; j < numSides; j++) {
                     const angle = j * (360 / numSides) * Math.PI / 180;
                     const x = shapeX + (shapeSize / 2) * Math.cos(angle);
                     const y = shapeY + (shapeSize / 2) * Math.sin(angle);
                     points += x + ',' + y + ' ';
                 }
-                
                 polygon.setAttribute('points', points.trim());
                 polygon.setAttribute('class', 'shape');
                 svg.appendChild(polygon);
-                
-                // Add shape center dot
                 const shapeCenterDot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
                 shapeCenterDot.setAttribute('cx', shapeX);
                 shapeCenterDot.setAttribute('cy', shapeY);
                 shapeCenterDot.setAttribute('r', 2);
-                shapeCenterDot.setAttribute('fill', '#f6ad55');
+                shapeCenterDot.setAttribute('fill', '#fbbf24');
                 svg.appendChild(shapeCenterDot);
             }
         }
-        
-        // Initialize with default values
         updatePattern();
     </script>
 </body>
