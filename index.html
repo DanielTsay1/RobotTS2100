@@ -170,29 +170,25 @@
             <div class="control-group">
                 <label>Number of Shapes</label>
                 <div class="control-row">
-                    <input type="range" id="numShapes" min="3" max="8" value="5" oninput="updatePattern()">
-                    <div class="value-display" id="numShapesValue">5</div>
+                    <input type="number" id="numShapes" min="3" max="20" value="5" oninput="updatePattern()">
                 </div>
             </div>
             <div class="control-group">
                 <label>Sides per Shape</label>
                 <div class="control-row">
-                    <input type="range" id="numSides" min="3" max="8" value="4" oninput="updatePattern()">
-                    <div class="value-display" id="numSidesValue">4</div>
+                    <input type="number" id="numSides" min="3" max="20" value="4" oninput="updatePattern()">
                 </div>
             </div>
             <div class="control-group">
-                <label>Shape Size</label>
+                <label>Shape Size (mm)</label>
                 <div class="control-row">
-                    <input type="range" id="shapeSize" min="20" max="60" value="40" oninput="updatePattern()">
-                    <div class="value-display" id="shapeSizeValue">40mm</div>
+                    <input type="number" id="shapeSize" min="20" max="60" value="40" oninput="updatePattern()">
                 </div>
             </div>
             <div class="control-group">
-                <label>Radius from Center</label>
+                <label>Radius from Center (mm)</label>
                 <div class="control-row">
-                    <input type="range" id="radius" min="60" max="140" value="100" oninput="updatePattern()">
-                    <div class="value-display" id="radiusValue">100mm</div>
+                    <input type="number" id="radius" min="60" max="140" value="100" oninput="updatePattern()">
                 </div>
             </div>
         </div>
@@ -232,10 +228,6 @@
             const numSides = parseInt(document.getElementById('numSides').value);
             const shapeSize = parseInt(document.getElementById('shapeSize').value);
             const radius = parseInt(document.getElementById('radius').value);
-            document.getElementById('numShapesValue').textContent = numShapes;
-            document.getElementById('numSidesValue').textContent = numSides;
-            document.getElementById('shapeSizeValue').textContent = shapeSize + 'mm';
-            document.getElementById('radiusValue').textContent = radius + 'mm';
             drawPattern(numShapes, numSides, shapeSize, radius);
         }
         function drawPattern(numShapes, numSides, shapeSize, radius) {
