@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Robot Drawing</title>
+    <title>Robot Drawing with Rotation</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
@@ -64,12 +64,34 @@
             flex: 1;
             accent-color: #2563eb;
         }
+        input[type="number"] {
+            padding: 6px 8px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            width: 70px;
+        }
         .value-display {
             min-width: 36px;
             text-align: right;
             font-size: 0.97rem;
             color: #2563eb;
             font-weight: 600;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .checkbox-group input[type="checkbox"] {
+            accent-color: #2563eb;
+            transform: scale(1.1);
+        }
+        .checkbox-group label {
+            margin: 0;
+            font-size: 0.95rem;
+            cursor: pointer;
         }
         .pattern {
             background: #fff;
@@ -96,6 +118,11 @@
         .shape {
             fill: none;
             stroke: #2563eb;
+            stroke-width: 2;
+        }
+        .shape-corners-out {
+            fill: none;
+            stroke: #7c3aed;
             stroke-width: 2;
         }
         .radius-line {
@@ -148,8 +175,20 @@
             padding: 10px;
             border-radius: 6px;
             font-family: 'Menlo', 'Monaco', monospace;
-            font-size: 0.97rem;
+            font-size: 0.95rem;
             margin: 10px 0;
+            overflow-x: auto;
+        }
+        .rotation-section {
+            border-top: 1px solid #e5e7eb;
+            margin-top: 16px;
+            padding-top: 16px;
+        }
+        .rotation-section h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #2563eb;
+            margin-bottom: 12px;
         }
         @media (max-width: 600px) {
             .main-container {
@@ -162,7 +201,7 @@
 <body>
     <div class="header">
         <h1>Robot Drawing Pattern</h1>
-        <p>Visualize geometric patterns for your robot</p>
+        <p>Visualize geometric patterns with rotation control</p>
     </div>
     <div class="main-container">
         <div class="controls">
@@ -191,67 +230,133 @@
                     <input type="number" id="radius" min="60" max="140" value="100" oninput="updatePattern()">
                 </div>
             </div>
+            
+            <div class="rotation-section">
+                <h4>Rotation Controls</h4>
+                <div class="control-group">
+                    <label>Global Rotation (degrees)</label>
+                    <div class="control-row">
+                        <input type="range" id="globalRotation" min="0" max="360" value="0" oninput="updatePattern(); updateRotationDisplay()">
+                        <span class="value-display" id="rotationValue">0°</span>
+                    </div>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="cornersOut" onchange="updatePattern()">
+                    <label for="cornersOut">Point corners outward from center</label>
+                </div>
+            </div>
         </div>
+
         <div class="pattern">
             <h3>Interactive Pattern</h3>
             <svg id="patternSvg" width="350" height="350"></svg>
             <div class="legend">
                 <div><span style="color: #ef4444;">●</span> Center Point</div>
-                <div><span style="color: #2563eb;">━</span> Shapes</div>
+                <div><span style="color: #2563eb;">━</span> Normal shapes</div>
+                <div><span style="color: #7c3aed;">━</span> Corners pointing out</div>
                 <div><span style="color: #cbd5e1;">┅</span> Radius lines</div>
-                <div><span style="color: #d1d5db;">┅</span> 8-inch (203mm) disk boundary</div>
+                <div><span style="color: #d1d5db;">┅</span> 8.2-inch (208mm) reach limit</div>
             </div>
         </div>
+
         <div class="info-section">
             <h3>How It Works</h3>
             <ul>
                 <li>The red dot is the center</li>
                 <li>Each shape is placed at the chosen radius (mm)</li>
                 <li>Shapes are evenly spaced around the circle</li>
-                <li>Dotted circle shows the 8-inch (203mm) disk limit</li>
+                <li>Dotted circle shows the 8.2-inch (208mm) end effector reach</li>
+                <li><strong>Global Rotation:</strong> Rotates all shapes by the same angle</li>
+                <li><strong>Corners Out:</strong> Orients each shape so a corner/vertex points away from center</li>
             </ul>
-            <div class="code-example">
-                drawPatternSingleBlock(5, 4, 1.5, 2.5, 0.0, 0.0)
+            
+            <h3>VAL3 Function Call</h3>
+            <div class="code-example" id="codeExample">
+                drawPatternSingleBlock(5, 4, 1.57, 3.94, 0.0, 0.0, 0, false)
             </div>
+            
+            <h3>Parameters Explained</h3>
             <ul>
-                <li>5 shapes around the center</li>
-                <li>4 sides each (squares)</li>
-                <li>1.5 inch side length</li>
-                <li>2.5 inches from center</li>
-                <li>Centered at (0.0, 0.0)</li>
+                <li><strong>inputShapes:</strong> <span id="paramShapes">5</span> shapes around the center</li>
+                <li><strong>inputSides:</strong> <span id="paramSides">4</span> sides each</li>
+                <li><strong>inputSideLength:</strong> <span id="paramSideLength">1.57</span> inches side length</li>
+                <li><strong>inputRadius:</strong> <span id="paramRadius">3.94</span> inches from center</li>
+                <li><strong>inputCenterX/Y:</strong> 0.0, 0.0 (center coordinates)</li>
+                <li><strong>inputRotation:</strong> <span id="paramRotation">0</span>° global rotation</li>
+                <li><strong>cornersOut:</strong> <span id="paramCornersOut">false</span></li>
             </ul>
         </div>
     </div>
+
     <script>
+        function updateRotationDisplay() {
+            const rotation = document.getElementById('globalRotation').value;
+            document.getElementById('rotationValue').textContent = rotation + '°';
+        }
+
         function updatePattern() {
             const numShapes = parseInt(document.getElementById('numShapes').value);
             const numSides = parseInt(document.getElementById('numSides').value);
             const shapeSize = parseInt(document.getElementById('shapeSize').value);
             const radius = parseInt(document.getElementById('radius').value);
-            drawPattern(numShapes, numSides, shapeSize, radius);
+            const globalRotation = parseInt(document.getElementById('globalRotation').value);
+            const cornersOut = document.getElementById('cornersOut').checked;
+            
+            drawPattern(numShapes, numSides, shapeSize, radius, globalRotation, cornersOut);
+            updateCodeExample(numShapes, numSides, shapeSize, radius, globalRotation, cornersOut);
         }
-        function drawPattern(numShapes, numSides, shapeSize, radius) {
+
+        function updateCodeExample(numShapes, numSides, shapeSize, radius, globalRotation, cornersOut) {
+            // Convert mm to inches for display
+            const sideLengthInches = (shapeSize / 25.4).toFixed(2);
+            const radiusInches = (radius / 25.4).toFixed(2);
+            
+            const codeExample = `drawPatternSingleBlock(${numShapes}, ${numSides}, ${sideLengthInches}, ${radiusInches}, 0.0, 0.0, ${globalRotation}, ${cornersOut})`;
+            document.getElementById('codeExample').textContent = codeExample;
+            
+            // Update parameter explanations
+            document.getElementById('paramShapes').textContent = numShapes;
+            document.getElementById('paramSides').textContent = numSides;
+            document.getElementById('paramSideLength').textContent = sideLengthInches;
+            document.getElementById('paramRadius').textContent = radiusInches;
+            document.getElementById('paramRotation').textContent = globalRotation;
+            document.getElementById('paramCornersOut').textContent = cornersOut;
+        }
+
+        function drawPattern(numShapes, numSides, shapeSize, radius, globalRotation, cornersOut) {
             const svg = document.getElementById('patternSvg');
             const centerX = 175;
             const centerY = 175;
-            const diskRadius = 140;
+            const diskRadius = 104; // 208mm / 2 = 104mm scaled to fit 350px canvas
+            
             svg.innerHTML = '';
+
+            // Draw disk boundary (end effector reach limit)
             const diskCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
             diskCircle.setAttribute('cx', centerX);
             diskCircle.setAttribute('cy', centerY);
             diskCircle.setAttribute('r', diskRadius);
             diskCircle.setAttribute('class', 'disk-boundary');
             svg.appendChild(diskCircle);
+
+            // Draw center dot
             const centerDot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
             centerDot.setAttribute('cx', centerX);
             centerDot.setAttribute('cy', centerY);
             centerDot.setAttribute('r', 4);
             centerDot.setAttribute('class', 'center-dot');
             svg.appendChild(centerDot);
+
+            // Calculate angle step for polygon vertices
+            const angleStep = 360 / numSides;
+
             for (let i = 0; i < numShapes; i++) {
+                // Calculate position rotation for this shape around the circle
                 const shapeRotation = i * (360 / numShapes);
-                const shapeX = centerX + radius * Math.cos(shapeRotation * Math.PI / 180);
-                const shapeY = centerY + radius * Math.sin(shapeRotation * Math.PI / 180);
+                const shapeX = centerX + (radius * 0.5) * Math.cos(shapeRotation * Math.PI / 180);
+                const shapeY = centerY + (radius * 0.5) * Math.sin(shapeRotation * Math.PI / 180);
+
+                // Draw radius line
                 const radiusLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
                 radiusLine.setAttribute('x1', centerX);
                 radiusLine.setAttribute('y1', centerY);
@@ -259,17 +364,37 @@
                 radiusLine.setAttribute('y2', shapeY);
                 radiusLine.setAttribute('class', 'radius-line');
                 svg.appendChild(radiusLine);
+
+                // Calculate individual shape rotation
+                let individualShapeRotation = globalRotation;
+                
+                if (cornersOut) {
+                    // Orient shape so a corner points away from center
+                    if (numSides % 2 === 0) {
+                        // For even-sided polygons, add half angle step to point corner outward
+                        individualShapeRotation += shapeRotation + (angleStep / 2);
+                    } else {
+                        // For odd-sided polygons, align vertex directly outward
+                        individualShapeRotation += shapeRotation;
+                    }
+                }
+
+                // Draw shape
                 const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
                 let points = '';
+                
                 for (let j = 0; j < numSides; j++) {
-                    const angle = j * (360 / numSides) * Math.PI / 180;
-                    const x = shapeX + (shapeSize / 2) * Math.cos(angle);
-                    const y = shapeY + (shapeSize / 2) * Math.sin(angle);
+                    const vertexAngle = (j * angleStep + individualShapeRotation) * Math.PI / 180;
+                    const x = shapeX + (shapeSize * 0.5 / 2) * Math.cos(vertexAngle);
+                    const y = shapeY + (shapeSize * 0.5 / 2) * Math.sin(vertexAngle);
                     points += x + ',' + y + ' ';
                 }
+                
                 polygon.setAttribute('points', points.trim());
-                polygon.setAttribute('class', 'shape');
+                polygon.setAttribute('class', cornersOut ? 'shape-corners-out' : 'shape');
                 svg.appendChild(polygon);
+
+                // Draw shape center dot
                 const shapeCenterDot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
                 shapeCenterDot.setAttribute('cx', shapeX);
                 shapeCenterDot.setAttribute('cy', shapeY);
@@ -278,6 +403,9 @@
                 svg.appendChild(shapeCenterDot);
             }
         }
+
+        // Initialize
+        updateRotationDisplay();
         updatePattern();
     </script>
 </body>
